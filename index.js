@@ -16,7 +16,13 @@ function renderNode(node, key) {
 
   var attr = node.attrs.reduce(function (result, attr) {
     var name = convertAttr(attr.name);
-    result[name] = name === 'style' ? styleParser(attr.value) : attr.value;
+    if (name === 'style') {
+      result[name] = styleParser(attr.value);
+    } else if (name === 'onClick') {
+      result[name] = new Function(attr.value);
+    } else {
+      result[name] = attr.value;
+    }
     return result;
   }, {key: key});
 
